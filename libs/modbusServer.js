@@ -15,21 +15,23 @@ class MODBUSSERVER{
         })
 
         self.server.on('connection', (socket)=>{
-            console.log(`new client connection made ${JSON.stringify(socket)}`)
             let socketData = Buffer.alloc(0)
 
             socket.on('data', (chunck)=>{
-                console.log(`data from client ${chunck.toString()}`)
                 if(socketData.length == 1){
                     socketData = chunck
                 }else{
                     socketData = Buffer.concat([socketData,chunck])
                 }
                 setTimeout(async ()=>{
-                    console.log(`complete socketData ${socketData}`)
-                    let response = await self.modbusController.processReadRequest(socketData)
+                    let thisData = Buffer.from(socketData)
+                    socketData = Buffer.alloc(0)
+                    console.log('thisData.length',thisData.length)
+                    console.log('socketData.length',socketData.length)
+                    let response = await self.modbusController.processData(thisData)
                     try{
                         socket.write(response)
+                        console.log(response)
                     }catch(e){
                         console.error(e)
                     }
