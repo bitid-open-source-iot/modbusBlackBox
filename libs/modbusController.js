@@ -3,15 +3,12 @@ var Q = require('q');
 class MODBUSCONTROLLER {
     constructor(options) {
 
-        this.testVal = 7
         this.arrRegisters = Array.from({ length: 10000 }, (v, i) => 0)
 
         this.init()
     }
 
     init() {
-        this.arrRegisters[0] = 44
-        this.arrRegisters[1] = 45
     }
 
 
@@ -46,7 +43,6 @@ class MODBUSCONTROLLER {
 
         switch (data[7]) {
             case (3): //ReadHolding Registers
-                // let readHoldingPayload = Buffer.alloc(11)
                 let regCount = bufData.readUInt8(11)
                 let readHoldingPayload = Buffer.alloc(9 + (regCount * 2))
                 let transId = bufData.readUInt16BE(0)
@@ -64,7 +60,6 @@ class MODBUSCONTROLLER {
                 let regWriteStartPos = 9
                 let regReadStartPos = bufData.readUInt16BE(8)
                 let regReadIndex = 0
-                let arrValue = 0
                 for (let i = 0; i < regCount; i++) {
                     let v
                     try {
@@ -85,7 +80,6 @@ class MODBUSCONTROLLER {
                 deferred.reject(`unhandled function code in processReadRequest for ${data[7]}`)
         }
 
-        // deferred.resolve(Buffer.from('hello world'))
         return deferred.promise
     }
 
@@ -127,6 +121,14 @@ class MODBUSCONTROLLER {
                 break
 
             case (16): //WriteHolding Registers
+                /**
+                 * IMPORTANT!!!
+                 * This only writes one register at a time which works fine with ADROIT.
+                 * For anything that actually tries to write multiple registers this would need to be changed accordingly
+                 * Some nice documentation
+                 * https://www.prosoft-technology.com/kb/assets/intro_modbustcp.pdf
+                 * 
+                 */
                 let writeMultipleHoldingRegisters = Buffer.alloc(12)
                 writeMultipleHoldingRegisters.writeInt16BE(transId, 0)            //transaction identifier
                 writeMultipleHoldingRegisters.writeInt16BE(0, 2)           //protocol identifier
@@ -140,8 +142,6 @@ class MODBUSCONTROLLER {
 
                 let regValue = bufData.readUInt16BE(13)
                 this.arrRegisters[startReg] = regValue
-                console.log('this.testVal>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', this.arrRegisters[startReg])
-                // writeMultipleHoldingRegisters.writeInt16BE(this.arrRegisters[startReg], 10)           //Register Value
                 let regCount = bufData.readUInt16BE(8)
                 writeMultipleHoldingRegisters.writeInt16BE(regCount, 10)
 
