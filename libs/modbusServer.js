@@ -28,8 +28,8 @@ class MODBUSSERVER{
                     socketData = Buffer.alloc(0)
                     console.log('thisData.length',thisData.length)
                     console.log('socketData.length',socketData.length)
-                    let response = await self.modbusController.processData(thisData)
                     try{
+                        let response = await self.modbusController.processData(thisData)
                         socket.write(response)
                         console.log(response)
                     }catch(e){

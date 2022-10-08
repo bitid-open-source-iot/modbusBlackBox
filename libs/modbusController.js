@@ -16,6 +16,8 @@ class MODBUSCONTROLLER {
         var deferred = Q.defer()
         let bufData = Buffer.from(data)
 
+        console.log('data',data)
+
         console.log('data[7]', data[7])
         switch (data[7]) {
             case (3): //ReadHolding Registers
