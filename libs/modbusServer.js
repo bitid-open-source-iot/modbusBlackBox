@@ -26,12 +26,12 @@ class MODBUSSERVER{
                 setTimeout(async ()=>{
                     let thisData = Buffer.from(socketData)
                     socketData = Buffer.alloc(0)
-                    console.log('thisData.length',thisData.length)
-                    console.log('socketData.length',socketData.length)
+                    // console.log('thisData.length',thisData.length)
+                    // console.log('socketData.length',socketData.length)
                     try{
                         let response = await self.modbusController.processData(thisData)
                         socket.write(response)
-                        console.log(response)
+                        // console.log(response)
                     }catch(e){
                         console.error(e)
                     }

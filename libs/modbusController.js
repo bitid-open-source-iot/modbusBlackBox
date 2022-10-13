@@ -16,20 +16,21 @@ class MODBUSCONTROLLER {
         var deferred = Q.defer()
         let bufData = Buffer.from(data)
 
-        console.log('data',data)
-
-        console.log('data[7]', data[7])
-        switch (data[7]) {
-            case (3): //ReadHolding Registers
-                deferred.resolve(this.processReadRequest(data))
-                break
-            case (6): //Write Single Holding Registers
-            case (16): //Write Multiple Holding Registers
-                deferred.resolve(this.processWriteRequest(data))
-                break
-            default:
-                console.error(`unhandled function code in processReadRequest for ${data[7]}`)
-                deferred.reject(`unhandled function code in processReadRequest for ${data[7]}`)
+        if(data.length > 0){
+            switch (data[7]) {
+                case (3): //ReadHolding Registers
+                    deferred.resolve(this.processReadRequest(data))
+                    break
+                case (6): //Write Single Holding Registers
+                case (16): //Write Multiple Holding Registers
+                    deferred.resolve(this.processWriteRequest(data))
+                    break
+                default:
+                    console.error(`unhandled function code in processReadRequest for ${data[7]}`)
+                    deferred.reject(`unhandled function code in processReadRequest for ${data[7]}`)
+            }
+        }else{
+            deferred.resolve('')
         }
 
         // deferred.resolve(Buffer.from('hello world'))
@@ -48,7 +49,7 @@ class MODBUSCONTROLLER {
                 let regCount = bufData.readUInt8(11)
                 let readHoldingPayload = Buffer.alloc(9 + (regCount * 2))
                 let transId = bufData.readUInt16BE(0)
-                console.log('transId', transId)
+                // console.log('transId', transId)
                 readHoldingPayload.writeInt16BE(transId, 0)            //transaction identifier
                 readHoldingPayload.writeInt16BE(0, 2)           //protocol identifier
                 readHoldingPayload.writeInt16BE((regCount * 2) + 3, 4)           //length
