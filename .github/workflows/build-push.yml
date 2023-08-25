@@ -2,7 +2,7 @@ name: Publish Docker Image
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ none ]
   release:
     types:
       - published
@@ -22,9 +22,9 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: shanebowyer/modbus-blackbox
-          tag-sha: false
-          tag-edge: true
-          tag-latest: false
+          tag-sha: true
+          tag-edge: false
+          tag-latest: true
           
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
