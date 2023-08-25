@@ -50,7 +50,7 @@ class MODBUSCONTROLLER {
                 let readHoldingPayload = Buffer.alloc(9 + (regCount * 2))
                 let transId = bufData.readUInt16BE(0)
                 // console.log('transId', transId)
-                readHoldingPayload.writeInt16BE(transId, 0)            //transaction identifier
+                readHoldingPayload.writeUInt16BE(transId, 0)            //transaction identifier
                 readHoldingPayload.writeInt16BE(0, 2)           //protocol identifier
                 readHoldingPayload.writeInt16BE((regCount * 2) + 3, 4)           //length
 
