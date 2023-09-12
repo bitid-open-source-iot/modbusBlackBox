@@ -100,7 +100,7 @@ class MODBUSCONTROLLER {
             case (6): //Write Single Holding Registers
                 try {
                     let writeHoldingRegister = Buffer.alloc(12)
-                    writeHoldingRegister.writeInt16BE(transId, 0)            //transaction identifier
+                    writeHoldingRegister.writeUInt16BE(transId, 0)            //transaction identifier
                     writeHoldingRegister.writeInt16BE(0, 2)           //protocol identifier
                     writeHoldingRegister.writeInt16BE(6, 4)           //length
 
@@ -133,7 +133,7 @@ class MODBUSCONTROLLER {
                  * 
                  */
                 let writeMultipleHoldingRegisters = Buffer.alloc(12)
-                writeMultipleHoldingRegisters.writeInt16BE(transId, 0)            //transaction identifier
+                writeMultipleHoldingRegisters.writeUInt16BE(transId, 0)            //transaction identifier
                 writeMultipleHoldingRegisters.writeInt16BE(0, 2)           //protocol identifier
                 writeMultipleHoldingRegisters.writeInt16BE(6, 4)           //length
 
