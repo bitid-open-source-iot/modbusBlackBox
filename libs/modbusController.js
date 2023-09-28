@@ -70,7 +70,7 @@ class MODBUSCONTROLLER {
                     } catch (e) {
                         v = 69
                     }
-                    readHoldingPayload.writeInt16BE(v, regWriteStartPos)           //Register Value
+                    readHoldingPayload.writeUInt16BE(v, regWriteStartPos)           //Register Value
                     regWriteStartPos += 2
                     regReadIndex++
                 }
@@ -112,7 +112,7 @@ class MODBUSCONTROLLER {
 
                     let regValue6 = bufData.readUInt16BE(10)
                     self.arrRegisters[startReg] = regValue6
-                    writeHoldingRegister.writeInt16BE(regValue6, 10)
+                    writeHoldingRegister.writeUInt16BE(regValue6, 10)
 
                     deferred.resolve(writeHoldingRegister)
 
