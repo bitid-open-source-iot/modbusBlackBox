@@ -1,0 +1,12 @@
+{
+    "name": "modbusBlackBox",
+    "install": "bash .cursor/install.sh",
+    "start": "bash .cursor/start.sh",
+    "terminals": [
+        {
+            "name": "modbus-blackbox",
+            "command": "node index.js"
+        }
+    ],
+    "ports": [5002]
+}
