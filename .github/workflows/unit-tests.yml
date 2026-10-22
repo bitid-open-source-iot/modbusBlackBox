@@ -1,0 +1,35 @@
+name: Unit tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 24.22.1 is the amd64/arm64 runtime. 22.23.4 covers linux/arm/v7.
+        node-version: ['24.22.1', '22.23.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - name: Start Modbus TCP black box
+        run: |
+          node index.js &
+          echo $! > /tmp/modbus-blackbox.pid
+          for i in $(seq 1 30); do
+            if node -e "require('net').connect({host:'127.0.0.1',port:5002},()=>process.exit(0)).on('error',()=>process.exit(1))" 2>/dev/null; then
+              exit 0
+            fi
+            sleep 0.2
+          done
+          echo "black box did not listen on 5002" >&2
+          exit 1
+      - run: npm test
