@@ -2,7 +2,9 @@
 
 
 
-docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --push -t shanebowyer/modbus-blackbox:main .
+# amd64 / arm64 default to Node 24.22.1. linux/arm/v7 must pass Node 22.23.4
+# BUILD_BASE / RUNTIME_BASE (Node 24 has no arm/v7 image). Prefer the
+# release workflow, which sets those args per platform.
 
 
 NOTE that if you have issues with buildx rerun this

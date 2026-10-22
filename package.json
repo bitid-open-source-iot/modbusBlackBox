@@ -1,10 +1,13 @@
 {
   "name": "modbusblackbox",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
-    "test": "./node_modules/.bin/mocha -- ./test/"
+    "test": "./node_modules/.bin/mocha --exit --timeout 10000 -- ./test/"
   },
   "author": "shanebowyer",
   "license": "ISC",
